@@ -16,7 +16,7 @@ public class Projects {
 	private String companyId;
 	private String employeeId;
 	private String projectName;
-	private long customerid;
+	private String customerid;
 	private String billingType;
 	private String projectStatus;
 	private String projectEstimate;
@@ -26,7 +26,7 @@ public class Projects {
 	private LocalDate createdDate;
 	private String description;
 	private String projectMembers;
-	public Projects(String projectId, String companyId, String employeeId, String projectName, long customerid,
+	public Projects(String projectId, String companyId, String employeeId, String projectName, String customerid,
 			String billingType, String projectStatus, String projectEstimate, String estimateHours,
 			LocalDate startDate, LocalDate endDate, LocalDate createdDate, String description, String projectMembers) {
 		super();
@@ -73,10 +73,10 @@ public class Projects {
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
-	public long getCustomerid() {
+	public String getCustomerid() {
 		return customerid;
 	}
-	public void setCustomerid(long customerid) {
+	public void setCustomerid(String customerid) {
 		this.customerid = customerid;
 	}
 
