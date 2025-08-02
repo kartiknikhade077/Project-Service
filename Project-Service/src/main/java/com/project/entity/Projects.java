@@ -13,8 +13,8 @@ public class Projects {
 	@Id
     @UuidGenerator
 	private String projectId;
-	private long companyId;
-	private long employeeId;
+	private String companyId;
+	private String employeeId;
 	private String projectName;
 	private long customerid;
 	private String billingType;
@@ -26,7 +26,7 @@ public class Projects {
 	private LocalDate createdDate;
 	private String description;
 	private String projectMembers;
-	public Projects(String projectId, long companyId, long employeeId, String projectName, long customerid,
+	public Projects(String projectId, String companyId, String employeeId, String projectName, long customerid,
 			String billingType, String projectStatus, String projectEstimate, String estimateHours,
 			LocalDate startDate, LocalDate endDate, LocalDate createdDate, String description, String projectMembers) {
 		super();
@@ -55,16 +55,16 @@ public class Projects {
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
 	}
-	public long getCompanyId() {
+	public String getCompanyId() {
 		return companyId;
 	}
-	public void setCompanyId(long companyId) {
+	public void setCompanyId(String companyId) {
 		this.companyId = companyId;
 	}
-	public long getEmployeeId() {
+	public String getEmployeeId() {
 		return employeeId;
 	}
-	public void setEmployeeId(long employeeId) {
+	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
 	}
 	public String getProjectName() {
