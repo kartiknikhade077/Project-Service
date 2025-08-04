@@ -136,5 +136,21 @@ public class ProjectController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error " + e.getMessage());
 		}
 	}
+	
+	@GetMapping("/getProjectByCustomerId/{customerId}")
+	public ResponseEntity<?> getProjectByCustomerId(@PathVariable String customerId) {
+		try { 
+			List<Projects> projectList=projectsRepository.findByCustomerid(customerId);
+			return ResponseEntity.ok(projectList);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error " + e.getMessage());
+		}
+	}
+	
+	
+	
 	    
 }

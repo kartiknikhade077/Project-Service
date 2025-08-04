@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.project.entity.Projects;
+import java.util.List;
+
 
 public interface ProjectsRepository extends JpaRepository<Projects, String> {
 	
@@ -15,4 +17,6 @@ public interface ProjectsRepository extends JpaRepository<Projects, String> {
 	Projects findByProjectId(String projectId);
 	
 	List<Projects> findAllByCompanyId(String companyId);
+	
+	List<Projects> findByCustomerid(String customerid);
 }
