@@ -1,5 +1,6 @@
 package com.project.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,5 +122,19 @@ public class ProjectController {
 		}
 	}
 	
+	@GetMapping("/getByAllProjectNames")
+	public ResponseEntity<?> getByAllProjectNames(){
+		try {
+			List<Projects> listOfProjects = projectsRepository.findAllByCompanyId(company.getCompanyId());
+			List<String> projectNames =new ArrayList<>();
+			for (Projects projects : listOfProjects) {
+				projectNames.add(projects.getProjectName());
+			}
+			return ResponseEntity.ok(projectNames);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error " + e.getMessage());
+		}
+	}
 	    
 }
