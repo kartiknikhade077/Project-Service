@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.client.UserSerivceClinet;
 import com.project.dto.Company;
+import com.project.dto.Employee;
 import com.project.entity.Projects;
 import com.project.repository.ProjectsRepository;
 
@@ -153,6 +154,25 @@ public class ProjectController {
 		}
 	}
 	
+	
+	@GetMapping("/getEmployeesbyProjectId/{projectId}")
+	public ResponseEntity<?> getEmployeesbyProjectId(@PathVariable String projectId) {
+		try { 
+			String employeeIds=projectsRepository.findEmployeeIdsByProjectId(projectId);
+			
+			if(employeeIds == null || employeeIds.isEmpty()) {
+				
+				return ResponseEntity.status(HttpStatus.ACCEPTED).body("Employee Not Assigned To This Project");
+			}
+			List<Map<String, String>>  employeeList=userSerivceClinet.getEmployeeByProjectId(employeeIds);
+			return ResponseEntity.ok(employeeList);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error " + e.getMessage());
+		}
+	}
 	
 	
 	    
