@@ -126,11 +126,14 @@ public class ProjectController {
 	public ResponseEntity<?> getByAllProjectNames(){
 		try {
 			List<Projects> listOfProjects = projectsRepository.findAllByCompanyId(company.getCompanyId());
-			List<String> projectNames =new ArrayList<>();
+			List<HashMap<String, Object>> projectsResponse =new ArrayList<>();
 			for (Projects projects : listOfProjects) {
-				projectNames.add(projects.getProjectName());
+				HashMap<String, Object> hashMap = new HashMap<>();
+				hashMap.put("projectId", projects.getProjectId());
+				hashMap.put("projectName", projects.getProjectName());
+				projectsResponse.add(hashMap);
 			}
-			return ResponseEntity.ok(projectNames);
+			return ResponseEntity.ok(projectsResponse);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error " + e.getMessage());
