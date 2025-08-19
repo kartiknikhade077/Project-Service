@@ -24,7 +24,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, ExternalTokenValidationFilter filter) throws Exception {
         http.csrf().disable()
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/project/**").permitAll()
+                .requestMatchers("/project/**","/quotation/**").permitAll()
                 .anyRequest().authenticated())
             .addFilterBefore(filter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
         .httpBasic().disable()
