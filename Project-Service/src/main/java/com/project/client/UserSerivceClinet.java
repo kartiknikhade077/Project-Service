@@ -1,7 +1,11 @@
 package com.project.client;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.project.dto.Company;
 import com.project.dto.Employee;
@@ -16,5 +20,8 @@ public interface UserSerivceClinet {
 	
 	@GetMapping("/employee/getEmployeeInfo")
 	public Employee getEmployeeInfo();
+	
+	@GetMapping("/company/getEmployeeList/{employeeIds}")
+	public List<Map<String, String>> getEmployeeByProjectId(@PathVariable String employeeIds);
 
 }

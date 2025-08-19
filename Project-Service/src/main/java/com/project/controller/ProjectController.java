@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.client.UserSerivceClinet;
 import com.project.dto.Company;
+import com.project.dto.Employee;
 import com.project.entity.Projects;
 import com.project.repository.ProjectsRepository;
 
@@ -126,11 +127,14 @@ public class ProjectController {
 	public ResponseEntity<?> getByAllProjectNames(){
 		try {
 			List<Projects> listOfProjects = projectsRepository.findAllByCompanyId(company.getCompanyId());
-			List<String> projectNames =new ArrayList<>();
+			List<HashMap<String, Object>> projectsResponse =new ArrayList<>();
 			for (Projects projects : listOfProjects) {
-				projectNames.add(projects.getProjectName());
+				HashMap<String, Object> hashMap = new HashMap<>();
+				hashMap.put("projectId", projects.getProjectId());
+				hashMap.put("projectName", projects.getProjectName());
+				projectsResponse.add(hashMap);
 			}
-			return ResponseEntity.ok(projectNames);
+			return ResponseEntity.ok(projectsResponse);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error " + e.getMessage());
@@ -150,6 +154,25 @@ public class ProjectController {
 		}
 	}
 	
+	
+	@GetMapping("/getEmployeesbyProjectId/{projectId}")
+	public ResponseEntity<?> getEmployeesbyProjectId(@PathVariable String projectId) {
+		try { 
+			String employeeIds=projectsRepository.findEmployeeIdsByProjectId(projectId);
+			
+			if(employeeIds == null || employeeIds.isEmpty()) {
+				
+				return ResponseEntity.status(HttpStatus.ACCEPTED).body("Employee Not Assigned To This Project");
+			}
+			List<Map<String, String>>  employeeList=userSerivceClinet.getEmployeeByProjectId(employeeIds);
+			return ResponseEntity.ok(employeeList);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error " + e.getMessage());
+		}
+	}
 	
 	
 	    
