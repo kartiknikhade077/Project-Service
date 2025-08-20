@@ -30,12 +30,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.client.UserSerivceClinet;
 import com.project.dto.Company;
+import com.project.dto.ProformaInvoiceDTO;
 import com.project.dto.QuotationRequestDTO;
+import com.project.entity.ProformaInvoice;
+import com.project.entity.ProformaItems;
 import com.project.entity.QuotationConsiderations;
 import com.project.entity.QuotationPartImages;
 import com.project.entity.QuotationPartProcess;
 import com.project.entity.QuotationParts;
 import com.project.entity.Quotations;
+import com.project.repository.ProformaInvoiceRepository;
+import com.project.repository.ProformaItemsRepository;
 import com.project.repository.QuotationConsiderationsRepository;
 import com.project.repository.QuotationPartImagesRepository;
 import com.project.repository.QuotationPartProcessRepository;
@@ -58,7 +63,10 @@ public class QuotationController {
 	private QuotationPartImagesRepository quotationPartImagesRepository;
 	@Autowired
 	private QuotationConsiderationsRepository quotationConsiderationsRepository;
-
+    @Autowired
+	private ProformaInvoiceRepository proformaInvoiceRepository;
+    @Autowired
+    private ProformaItemsRepository proformaItemsRepository;
 	Company company;
 
 	@ModelAttribute
@@ -341,6 +349,31 @@ public class QuotationController {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error " + e.getMessage());
 		}
+	}
+	
+	@PostMapping("/createProformaInvoice")
+	public ResponseEntity<?> createProformaInvoice(@RequestBody ProformaInvoiceDTO request ){
+		
+		Map<String,Object> response=new LinkedHashMap<String, Object>();
+		
+		ProformaInvoice invoice=request.getProformaInvoice();
+		invoice.setCompanyId(company.getCompanyId());
+		proformaInvoiceRepository.save(invoice);
+		
+		List<ProformaItems> profromaitems=new ArrayList<ProformaItems>();
+		
+		for(ProformaItems items:request.getProformaItems()) {
+			
+			items.setProformaId(invoice.getProformaId());
+			proformaItemsRepository.save(items);
+			
+			profromaitems.add(items);
+		}
+		
+		response.put("proformaInfo", invoice);
+		response.put("proformaItems", profromaitems);
+		
+		return ResponseEntity.ok(profromaitems);
 	}
 	
 	
