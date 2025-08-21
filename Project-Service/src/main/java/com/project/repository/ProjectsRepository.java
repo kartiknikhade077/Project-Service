@@ -14,6 +14,7 @@ import com.project.entity.Projects;
 public interface ProjectsRepository extends JpaRepository<Projects, String> {
 	
 	Page<Projects> findByCompanyIdAndProjectNameContainingIgnoreCase(String companyId,String projectName,Pageable pageable);
+	Page<Projects> findByEmployeeIdAndProjectNameContainingIgnoreCase(String eemployeeId,String projectName,Pageable pageable);
   
 	Projects findByProjectId(String projectId);
 	

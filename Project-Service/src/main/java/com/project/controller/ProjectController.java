@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.client.UserSerivceClinet;
 import com.project.dto.Company;
 import com.project.dto.Employee;
+import com.project.dto.ModuleAccess;
+import com.project.dto.User;
 import com.project.entity.Projects;
 import com.project.repository.ProjectsRepository;
 
@@ -46,18 +48,32 @@ public class ProjectController {
 	}
 
 	Company company;
+	User user;
+	Employee employee;
+	ModuleAccess moduleAccess;
 
 	@ModelAttribute
-	public void companyDetails() {
+	public void getUserInfo() {
 
-		company = userSerivceClinet.getCompanyInfo();
+		user = userSerivceClinet.getUserInfo();
+		moduleAccess =userSerivceClinet.getModuleAccessInfo();
+		if(user.getRole().equalsIgnoreCase("ROLE_COMPANY")) {
+			company = userSerivceClinet.getCompanyInfo();
+		}else {
+			employee=userSerivceClinet.getEmployeeInfo();
+		}
 
 	}
 	
 	@PostMapping("/createProject")
 	public ResponseEntity<?> createProject(@RequestBody Projects project) {
 		try {
-			project.setCompanyId(company.getCompanyId());
+			if (user.getRole().equalsIgnoreCase("ROLE_COMPANY")) {
+				project.setCompanyId(company.getCompanyId());
+			} else {
+				project.setEmployeeId(employee.getEmployeeId());
+				project.setCompanyId(employee.getCompanyId());
+			}
 			projectsRepository.save(project);
 
 			return ResponseEntity.ok(project);
@@ -76,8 +92,15 @@ public class ProjectController {
 			
 			Map<String ,Object> data=new HashMap<String , Object>();
 			 Pageable pageable = PageRequest.of(page, size, Sort.by("projectId").descending());
-			
-		        Page<Projects> projectPage = projectsRepository.findByCompanyIdAndProjectNameContainingIgnoreCase(company.getCompanyId(),projectName, pageable);
+			 Page<Projects> projectPage=null;   
+			 if(user.getRole().equalsIgnoreCase("ROLE_COMPANY")) {
+				 projectPage   = projectsRepository.findByCompanyIdAndProjectNameContainingIgnoreCase(company.getCompanyId(),projectName, pageable);
+			    }else if(moduleAccess.isProjectViewAll()){
+			    	
+			    	projectPage   = projectsRepository.findByCompanyIdAndProjectNameContainingIgnoreCase(employee.getCompanyId(),projectName, pageable);
+			    }else{
+			    	projectPage   = projectsRepository.findByEmployeeIdAndProjectNameContainingIgnoreCase(employee.getEmployeeId(),projectName, pageable);	
+			    }
 		        List<Projects> projectList = projectPage.getContent();
 		        data.put("projectList", projectList);
 		        data.put("totalPages", projectPage.getTotalPages());
@@ -111,7 +134,12 @@ public class ProjectController {
 	@PutMapping("/updateProject")
 	public ResponseEntity<?> updateProject(@RequestBody Projects project) {
 		try { 
-			project.setCompanyId(company.getCompanyId());
+			if (user.getRole().equalsIgnoreCase("ROLE_COMPANY")) {
+				project.setCompanyId(company.getCompanyId());
+			} else {
+				project.setEmployeeId(employee.getEmployeeId());
+				project.setCompanyId(employee.getCompanyId());
+			}
 			projectsRepository.save(project);
 		    
 			return ResponseEntity.ok(project);

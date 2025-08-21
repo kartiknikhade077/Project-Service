@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.project.dto.Company;
 import com.project.dto.Employee;
+import com.project.dto.ModuleAccess;
+import com.project.dto.User;
 
 
 
@@ -23,5 +25,12 @@ public interface UserSerivceClinet {
 	
 	@GetMapping("/company/getEmployeeList/{employeeIds}")
 	public List<Map<String, String>> getEmployeeByProjectId(@PathVariable String employeeIds);
+	
+	@GetMapping("/company/getUserInfo")
+	public User getUserInfo();
+	
+	@GetMapping("/company/getModuleAccessInfo")
+	public ModuleAccess getModuleAccessInfo();
+	
 
 }
